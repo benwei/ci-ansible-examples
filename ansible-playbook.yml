@@ -1,0 +1,22 @@
+---
+- hosts: all
+  tasks:
+    # task for hello.sh
+    - copy: src=hello.sh
+            dest=~/hello.sh
+            mode=0644
+            force=yes
+      register: act_script
+
+    - name: run command hello.sh
+      command: /bin/sh ~/hello.sh
+      when: act_script.changed
+      register: message
+
+    # task dump result
+    - name: print debug message
+      debug:
+        msg: "{{ message }}"
+      when: message.changed
+
+
